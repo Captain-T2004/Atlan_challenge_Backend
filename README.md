@@ -113,4 +113,4 @@ The API returns a 500 status code with an error message in case of any exception
 
 [Akshay Behl](https://www.linkedin.com/in/akshay-behl-450661258/), akshaybehl213@outlook.com
 
-Project Link: [https://github.com/your-username/travel-itinerary-backend](https://github.com/your-username/travel-itinerary-backend)
+Project Link: [https://atlan-challenge-backend.vercel.app/](https://atlan-challenge-backend.vercel.app/)
