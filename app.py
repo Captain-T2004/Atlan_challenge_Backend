@@ -22,8 +22,10 @@ app.add_middleware(
 )
 
 genai.configure(api_key=os.getenv("GOOGLE_API_KEY"))
-model = genai.GenerativeModel("gemini-1.5-flash")
+# model used is gemini-1.5-flash because of it's faster and reliable response times 
+model = genai.GenerativeModel("gemini-1.5-flash") 
 
+# TravelPreferences class, this class will provide template for input data
 class TravelPreferences(BaseModel):
     travel_type: str
     budget: float
@@ -38,6 +40,7 @@ class TravelPreferences(BaseModel):
     number_of_children: Optional[int] = None
     currency: Optional[str] = None
 
+# Itinerary class, this class will provide template for output data
 class Itinerary(BaseModel):
     locations: List[str]
     details: str
@@ -64,10 +67,21 @@ def generate_prompt(preferences: TravelPreferences) -> str:
 
 @app.post("/generate_itinerary", response_model=Itinerary)
 async def generate_itinerary(preferences: TravelPreferences):
+    """
+    Generates the itinerary taking user preferences
+
+    Args:
+        preferences: The user preference as TravelPrefrences object
+
+    Returns:
+        Itinerary: Itinerary generated as Itinerary object 
+
+    Errors & Exceptions:
+        500: In case of any Exception
+    """
     try:
         prompt = generate_prompt(preferences)
         logger.info(f"Generating itinerary for preferences: {preferences}")
-        
         response = model.generate_content(prompt)
         
         itinerary_text = response.text
@@ -79,7 +93,6 @@ async def generate_itinerary(preferences: TravelPreferences):
             details=itinerary_text
         )
     except Exception as e:
-        print(e)
         raise HTTPException(status_code=500, detail=str(e))
 
 if __name__ == "__main__":
